@@ -458,8 +458,6 @@
     */
     
     after: function (old_slide, new_slide) {
-      console.log(old_slide);
-      console.log(new_slide);
       return true;
     }
     
