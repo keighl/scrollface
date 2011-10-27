@@ -8,9 +8,11 @@ A super basic jQuery slideshow plugin.
 
 ```js
 $('#slideshow').scrollface({
-  next  : $('#next'),
-  prev  : $('#prev'),
-  pager : $('#pager')
+  next   : $('#next'),
+  prev   : $('#prev'),
+  pager  : $('#pager'),
+  speed  : 400,
+  easing : 'easeOutExpo'
 });
 ```
 
