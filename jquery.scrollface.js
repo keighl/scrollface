@@ -26,14 +26,17 @@
         data       = $(this).data('scrollface'),
         settings   = {                             
           pager              : null,            
-          anchor_builder     : methods.anchor_builder,            
+          pager_builder      : methods.pager_builder,            
           next               : null,            
           prev               : null,            
           active_pager_class : 'active',        
           speed              : 300,             
           easing             : 'linear',        
           auto               : true,
-          interval           : 2000
+          interval           : 2000,
+          before             : methods.before,
+          after              : methods.after,
+          transition         : "horizontal"
         };
       
         if (!data) {
@@ -49,12 +52,24 @@
           settings.index     = 0;
           settings.is_moving = false;
           settings.timer     = null;
+          
+          switch (settings.transition) {
+            case "vertical":
+              settings.transition = transitions.vertical;
+              break;
+            case "random":
+              settings.transition = transitions.random;
+              break;
+            default:
+              settings.transition = transitions.horizontal;
+              break;
+          }
 
           /* 
           * Force relative position on wrapper element
           */
           
-          $(this).css({ position : 'relative '});
+          $(this).css({ position : 'absolute' });
           
           /* 
           * Force absolute position on slide elements
@@ -78,7 +93,7 @@
             
             if ($(settings.pager).size()) {
               
-              if (typeof settings.anchor_builder === "function") {
+              if (typeof settings.pager_builder === "function") {
                
                 /*
                 * Send a message to the callback (plugin or user defined)
@@ -88,7 +103,7 @@
                 * User must return an achor object
                 */
                 
-                anchor = settings.anchor_builder.call($this, settings.pager, i, e);                
+                anchor = settings.pager_builder.call($this, settings.pager, i, e);                
 
                 if (i === 0) {
                   $(anchor).addClass(settings.active_pager_class);
@@ -198,7 +213,7 @@
     * force_continuity -> force a particular direction
     */
     
-    step_to: function (index, force_continuity) {
+    step_to: function (index, direction, transition) {
             
       return $(this).each(function () {
         
@@ -220,68 +235,42 @@
           data.is_moving = true;        
         
           /* 
-          * Update the pager if it's there
+          * Update the pager, if it's there
           */
           
           if ($(data.pager).size()) {          
             $('a', data.pager).removeClass(data.active_pager_class);
             $('a', data.pager).eq(index).addClass(data.active_pager_class);
           }
-      
-          /* 
-          * Which direction are we sliding in?
-          */
-      
-          var direction = (index > data.index) ? 'left' : 'right';
-          direction = force_continuity || direction;
-      
-          /* 
-          * Calculate current position of current slide and container
-          */
-      
-          var curr_container_pos = parseInt($(this).css('left'), 10) || 0,
-            curr_slide           = $(data.slides[data.index]),
-            curr_slide_pos       = parseInt($(curr_slide).css('left'), 10) || 0; 
-      
-          /* 
-          * Calculate the position for the next slide
-          * Place the next slide either to the right or left of the current slide
-          */
-      
-          var next_slide_pos = (direction === "left") 
-            ? curr_slide_pos + data.width 
-            : curr_slide_pos - data.width;
-      
-          var next_slide = $(data.slides[index])
-            .css({
-              left : next_slide_pos
-            }).show();
-        
+
           /*
-          * Calculate the new wrapper position
+          * Run the BEFORE callback
           */
-      
-          var new_container_pos = (direction === "left") 
-              ? curr_container_pos - data.width 
-              : curr_container_pos + data.width;
-         
+
+          if (typeof data.before === "function") {
+            
+            var old_slide = {
+              id    : data.index, 
+              slide : $(data.slides[data.index]),
+            },
+            new_slide = {
+              id    : index,
+              slide : $(data.slides[index]),
+            }
+
+            data.before.call(this, old_slide, new_slide);
+
+          }
+          
           /*
-          * Animate the slides wrapper
+          * Run the transition (user defined or preassigned)
           */
-      
-          $(this).stop().animate({
-            left : new_container_pos
-          }, data.speed, data.easing, function () {
-        
-            /* 
-            * Update the slideshow data, and hide the slide we just removed
-            */
-        
-            $(curr_slide).hide();
-            data.index     = index;
-            data.is_moving = false;
-        
-          });
+
+          if (transition && transitions[transition]) {
+            transitions[transition].call(this, index, direction);
+          } else {
+            data.transition.call(this, index, direction);
+          }
         
         }
         
@@ -291,7 +280,7 @@
     
     // -------------------------------
     
-    next: function () {
+    next: function (direction, transition) {
       
       return $(this).each(function () {
       
@@ -301,10 +290,11 @@
           return false;
         }
         
-        var index        = (data.index === data.count - 1) ? 0 : data.index + 1,
-        force_continuity = (data.index === data.count - 1) ? 'left' : false;
-            
-        methods.step_to.call(this, index, force_continuity);
+        var index = (data.index === data.count - 1) ? 0 : data.index + 1;
+
+        direction = direction || "advance";
+
+        methods.step_to.call(this, index, direction, transition);
       
       });
       
@@ -312,7 +302,7 @@
     
     // -------------------------------
     
-    prev: function () {
+    prev: function (direction, transition) {
           
       return $(this).each(function () {
       
@@ -322,10 +312,11 @@
           return false;
         }
         
-        var index        = (data.index === 0) ? data.count - 1 : data.index - 1,
-        force_continuity = (data.index === 0) ? 'right' : false;
+        var index = (data.index === 0) ? data.count - 1 : data.index - 1;
 
-        methods.step_to.call(this, index, force_continuity);
+        direction = direction || "retreat";
+
+        methods.step_to.call(this, index, direction, transition);
       
       });
       
@@ -426,7 +417,7 @@
     
     //---------------------------------
     
-    anchor_builder: function (pager, index, slide) {
+    pager_builder: function (pager, index, slide) {
         
       var anchor = $(document.createElement('a'))
         .html(index + 1)
@@ -434,6 +425,227 @@
       
       return anchor;
       
+    },
+    
+    //---------------------------------
+    
+    /*
+    old_slide = {
+      id : #,
+      slide : $() object
+    }
+    new_slide = {
+      id : #,
+      slide : $() object
+    }
+    */
+    
+    before: function (old_slide, new_slide) {
+      return true;
+    },
+    
+    //---------------------------------
+    
+    /*
+    old_slide = {
+      id : #,
+      slide : $() object
+    }
+    new_slide = {
+      id : #,
+      slide : $() object
+    }
+    */
+    
+    after: function (old_slide, new_slide) {
+      console.log(old_slide);
+      console.log(new_slide);
+      return true;
+    }
+    
+  };
+  
+  // ----------------------------------
+  
+  var transitions = {
+    
+    horizontal: function (index, direction) {
+    
+      var data = $(this).data('scrollface');
+      
+      if (!data) {
+        return false;
+      }
+          
+      /* 
+      * Calculate current position of current slide and container
+      */
+  
+      var curr_container_pos = parseInt($(this).css('left'), 10) || 0,
+      curr_slide             = $(data.slides[data.index]),
+      curr_slide_left_pos    = parseInt($(curr_slide).css('left'), 10) || 0,
+      curr_slide_top_pos     = parseInt($(curr_slide).css('top'), 10) || 0; 
+  
+      /* 
+      * Calculate the position for the next slide
+      * Place the next slide either to the right or left of the current slide
+      */
+  
+      var next_slide_left_pos = (direction === "advance") 
+        ? curr_slide_left_pos + data.width 
+        : curr_slide_left_pos - data.width;
+  
+      var next_slide = $(data.slides[index])
+        .css({
+          left : next_slide_left_pos,
+          top  : curr_slide_top_pos
+        }).show();
+    
+      /*
+      * Calculate the new wrapper position
+      */
+  
+      var new_container_pos = (direction === "advance") 
+          ? curr_container_pos - data.width 
+          : curr_container_pos + data.width;
+        
+      /*
+      * Animate the slides wrapper
+      */
+  
+      $(this).stop().animate({
+        left : new_container_pos
+      }, data.speed, data.easing, function () {
+    
+        
+        /*
+        * Run the BEFORE callback
+        */
+
+        if (typeof data.after === "function") {
+          
+          var old_slide = {
+            id    : data.index, 
+            slide : $(data.slides[data.index]),
+          },
+          new_slide = {
+            id    : index,
+            slide : $(data.slides[index]),
+          }
+
+          data.after.call(this, old_slide, new_slide);
+
+        }
+
+        /* 
+        * Update the slideshow data, and hide the slide we just removed
+        */
+    
+        $(curr_slide).hide();
+        data.index     = index;
+        data.is_moving = false;
+    
+      });
+      
+    },
+    
+    vertical: function (index, direction) {
+    
+      var data = $(this).data('scrollface');
+      
+      if (!data) {
+        return false;
+      }
+      
+      /* 
+      * Calculate current position of current slide and container
+      */
+  
+      var curr_container_pos = parseInt($(this).css('top'), 10) || 0,
+      curr_slide             = $(data.slides[data.index]),
+      curr_slide_top_pos     = parseInt($(curr_slide).css('top'), 10) || 0,
+      curr_slide_left_pos    = parseInt($(curr_slide).css('left'), 10) || 0; 
+
+      /* 
+      * Calculate the position for the next slide
+      * Place the next slide either to the right or left of the current slide
+      */
+  
+      var next_slide_top_pos = (direction === "advance") 
+          ? curr_slide_top_pos + data.height 
+          : curr_slide_top_pos - data.height;
+  
+      var next_slide = $(data.slides[index])
+        .css({
+          top  : next_slide_top_pos,
+          left : curr_slide_left_pos
+        }).show();
+    
+      /*
+      * Calculate the new wrapper position
+      */
+  
+      var new_container_pos = (direction === "advance") 
+          ? curr_container_pos - data.height 
+          : curr_container_pos + data.height;
+           
+      /*
+      * Animate the slides wrapper
+      */
+  
+      $(this).stop().animate({
+        top : new_container_pos
+      }, data.speed, data.easing, function () {
+    
+        /*
+        * Run the BEFORE callback
+        */
+
+        if (typeof data.after === "function") {
+          
+          var old_slide = {
+            id    : data.index, 
+            slide : $(data.slides[data.index]),
+          },
+          new_slide = {
+            id    : index,
+            slide : $(data.slides[index]),
+          }
+
+          data.after.call(this, old_slide, new_slide);
+
+        }
+        
+        /* 
+        * Update the slideshow data, and hide the slide we just removed
+        */
+    
+        $(curr_slide).hide();
+        data.index     = index;
+        data.is_moving = false;
+    
+      });
+      
+    },
+
+    random: function (index, direction) {
+      
+      var data = $(this).data('scrollface');
+      
+      if (!data) {
+        return false;
+      }
+
+      var available_transitions = ["horizontal", "vertical"];
+
+      /*
+      * Choose a random transition
+      */
+
+      var transition = available_transitions[Math.floor(Math.random() * available_transitions.length)];
+
+      transitions[transition].call(this, index, direction);
+    
     }
     
   };
