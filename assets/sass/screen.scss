@@ -85,6 +85,7 @@ a.info {
   @include linear-gradient(color-stops(#ee5f5b 0%, #c43c35 100%), top);
   color:#fff;
   border:1px solid #c43c35;
+  font-size:0.8em;
   
   &:active {
     -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);

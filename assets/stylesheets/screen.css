@@ -542,22 +542,23 @@ a.info {
   background-image: linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
   color: #fff;
   border: 1px solid #c43c35;
+  font-size: 0.8em;
 }
-/* line 89, ../sass/screen.scss */
+/* line 90, ../sass/screen.scss */
 a.download:active,
 a.info:active {
   -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-/* line 95, ../sass/screen.scss */
+/* line 96, ../sass/screen.scss */
 a.download:hover,
 a.info:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
   opacity: 0.9;
 }
 
-/* line 102, ../sass/screen.scss */
+/* line 103, ../sass/screen.scss */
 a.info {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f7f7f7), color-stop(100%, #eaeaea));
   background-image: -webkit-linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
@@ -570,7 +571,7 @@ a.info {
   text-shadow: none;
 }
 
-/* line 110, ../sass/screen.scss */
+/* line 111, ../sass/screen.scss */
 .demo_wrapper {
   margin-bottom: 40px;
   padding: 30px 0px;
@@ -579,12 +580,12 @@ a.info {
   border-bottom: 1px #666 solid;
 }
 
-/* line 118, ../sass/screen.scss */
+/* line 119, ../sass/screen.scss */
 .demo {
   position: relative;
 }
 
-/* line 122, ../sass/screen.scss */
+/* line 123, ../sass/screen.scss */
 #slideshow_mask {
   position: relative;
   overflow: hidden;
@@ -593,7 +594,7 @@ a.info {
   height: 320px;
 }
 
-/* line 130, ../sass/screen.scss */
+/* line 131, ../sass/screen.scss */
 #slideshow {
   position: absolute;
   left: 0px;
@@ -602,14 +603,14 @@ a.info {
   height: 320px;
 }
 
-/* line 138, ../sass/screen.scss */
+/* line 139, ../sass/screen.scss */
 #slideshow .slide {
   position: absolute;
   width: 640px;
   height: 320px;
 }
 
-/* line 145, ../sass/screen.scss */
+/* line 146, ../sass/screen.scss */
 a#prev,
 a#next {
   width: 40px;
@@ -622,19 +623,19 @@ a#next {
   text-indent: -999em;
   cursor: pointer;
 }
-/* line 157, ../sass/screen.scss */
+/* line 158, ../sass/screen.scss */
 a#prev:hover,
 a#next:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
   opacity: 0.9;
 }
-/* line 161, ../sass/screen.scss */
+/* line 162, ../sass/screen.scss */
 a#prev:active,
 a#next:active {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
   opacity: 0.6;
 }
-/* line 165, ../sass/screen.scss */
+/* line 166, ../sass/screen.scss */
 a#prev.inactive,
 a#next.inactive {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=10);
@@ -642,23 +643,23 @@ a#next.inactive {
   cursor: arrow;
 }
 
-/* line 172, ../sass/screen.scss */
+/* line 173, ../sass/screen.scss */
 a#next {
   right: -30px;
 }
 
-/* line 177, ../sass/screen.scss */
+/* line 178, ../sass/screen.scss */
 a#prev {
   left: -30px;
 }
 
-/* line 183, ../sass/screen.scss */
+/* line 184, ../sass/screen.scss */
 #pager {
   margin: 0 auto;
   text-align: center;
   padding-top: 20px;
 }
-/* line 188, ../sass/screen.scss */
+/* line 189, ../sass/screen.scss */
 #pager a {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -695,22 +696,22 @@ a#prev {
 #pager a {
   *display: inline;
 }
-/* line 200, ../sass/screen.scss */
+/* line 201, ../sass/screen.scss */
 #pager a:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   opacity: 0.8;
 }
-/* line 204, ../sass/screen.scss */
+/* line 205, ../sass/screen.scss */
 #pager a:active {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
   opacity: 0.5;
 }
-/* line 208, ../sass/screen.scss */
+/* line 209, ../sass/screen.scss */
 #pager a.active {
   background-color: #c43c35;
 }
 
-/* line 216, ../sass/screen.scss */
+/* line 217, ../sass/screen.scss */
 pre.prettyprint {
   clear: both;
   margin-left: 2.041%;
@@ -726,7 +727,7 @@ pre.prettyprint {
   border: 1px #666 solid;
   margin-left: 0px;
 }
-/* line 224, ../sass/screen.scss */
+/* line 225, ../sass/screen.scss */
 pre.prettyprint:last-child {
   margin-bottom: 40px;
 }
