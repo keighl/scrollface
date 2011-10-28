@@ -25,9 +25,15 @@
     <div class="demo container">      
       <div id="slideshow_mask">
         <div id="slideshow">
-          <div class="slide" style="background:red">..</div>
-          <div class="slide" style="background:blue">..</div>
-          <div class="slide" style="background:yellow">..</div>
+          <div class="slide">
+            <img src="assets/images/shark_1.jpg">
+          </div>
+          <div class="slide">
+            <img src="assets/images/shark_2.jpg">
+          </div>
+          <div class="slide">
+            <img src="assets/images/shark_3.jpg">
+          </div>
         </div>
       </div>
       <div id="pager"></div>
@@ -39,13 +45,54 @@
   <div class="container">
     <h2>Javascript</h2>
     <pre class="prettyprint">
-
+$('#slideshow').scrollface({
+  next   : $('#next'),
+  prev   : $('#prev'),
+  pager  : $('#pager'),
+  speed  : 400,
+  easing : 'easeOutExpo'
+});
     </pre>
     <h2>HTML</h2>
     <pre class="prettyprint">
+&lt;div id=&quot;slideshow_mask&quot;&gt;
+  &lt;div id=&quot;slideshow&quot;&gt;
+    &lt;div class=&quot;slide&quot;&gt;...&lt;/div&gt;
+    &lt;div class=&quot;slide&quot;&gt;...&lt;/div&gt;
+    &lt;div class=&quot;slide&quot;&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;pager&quot;&gt;&lt;/div&gt;
+&lt;a id=&quot;prev&quot;&gt;&lt;/a&gt;
+&lt;a id=&quot;next&quot;&gt;&lt;/a&gt;
     </pre>
     <h2>CSS</h2>
     <pre class="prettyprint">
+#slideshow_mask {
+  position:relative;
+  overflow:hidden;
+  margin:0 auto;
+  width:640px;
+  height:320px;
+}
+
+#slideshow {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:640px;
+  height:320px;
+}
+
+#slideshow .slide {
+  position:absolute;
+  width:640px;
+  height:320px;
+}
+
+#pager a.active {
+  background:orange;
+}
     </pre>
   </div> 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.js"></script>

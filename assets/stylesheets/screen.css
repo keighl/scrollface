@@ -542,22 +542,23 @@ a.info {
   background-image: linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
   color: #fff;
   border: 1px solid #c43c35;
+  font-size: 0.8em;
 }
-/* line 89, ../sass/screen.scss */
+/* line 90, ../sass/screen.scss */
 a.download:active,
 a.info:active {
   -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-/* line 95, ../sass/screen.scss */
+/* line 96, ../sass/screen.scss */
 a.download:hover,
 a.info:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
   opacity: 0.9;
 }
 
-/* line 102, ../sass/screen.scss */
+/* line 103, ../sass/screen.scss */
 a.info {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f7f7f7), color-stop(100%, #eaeaea));
   background-image: -webkit-linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
@@ -570,7 +571,7 @@ a.info {
   text-shadow: none;
 }
 
-/* line 110, ../sass/screen.scss */
+/* line 111, ../sass/screen.scss */
 .demo_wrapper {
   margin-bottom: 40px;
   padding: 30px 0px;
@@ -579,12 +580,12 @@ a.info {
   border-bottom: 1px #666 solid;
 }
 
-/* line 118, ../sass/screen.scss */
+/* line 119, ../sass/screen.scss */
 .demo {
   position: relative;
 }
 
-/* line 122, ../sass/screen.scss */
+/* line 123, ../sass/screen.scss */
 #slideshow_mask {
   position: relative;
   overflow: hidden;
@@ -593,7 +594,7 @@ a.info {
   height: 320px;
 }
 
-/* line 130, ../sass/screen.scss */
+/* line 131, ../sass/screen.scss */
 #slideshow {
   position: absolute;
   left: 0px;
@@ -601,7 +602,8 @@ a.info {
   width: 640px;
   height: 320px;
 }
-/* line 137, ../sass/screen.scss */
+
+/* line 139, ../sass/screen.scss */
 #slideshow .slide {
   position: absolute;
   width: 640px;

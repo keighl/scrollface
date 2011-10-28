@@ -251,12 +251,12 @@
             
             var old_slide = {
               id    : data.index, 
-              slide : $(data.slides[data.index]),
+              slide : $(data.slides[data.index])
             },
             new_slide = {
               id    : index,
-              slide : $(data.slides[index]),
-            }
+              slide : $(data.slides[index])
+            };
 
             data.before.call(this, old_slide, new_slide);
 
@@ -458,8 +458,6 @@
     */
     
     after: function (old_slide, new_slide) {
-      console.log(old_slide);
-      console.log(new_slide);
       return true;
     }
     
@@ -526,12 +524,12 @@
           
           var old_slide = {
             id    : data.index, 
-            slide : $(data.slides[data.index]),
+            slide : $(data.slides[data.index])
           },
           new_slide = {
             id    : index,
-            slide : $(data.slides[index]),
-          }
+            slide : $(data.slides[index])
+          };
 
           data.after.call(this, old_slide, new_slide);
 
@@ -605,12 +603,12 @@
           
           var old_slide = {
             id    : data.index, 
-            slide : $(data.slides[data.index]),
+            slide : $(data.slides[data.index])
           },
           new_slide = {
             id    : index,
-            slide : $(data.slides[index]),
-          }
+            slide : $(data.slides[index])
+          };
 
           data.after.call(this, old_slide, new_slide);
 
