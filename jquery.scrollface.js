@@ -53,20 +53,8 @@
           settings.is_moving = false;
           settings.timer     = null;
 
-          switch (settings.transition) {
-            case "vertical":
-              settings.transition = transitions.vertical;
-              break;
-            case "random":
-              settings.transition = transitions.random;
-              break;
-            default:
-              settings.transition = transitions.horizontal;
-              break;
-          }
-
           /*
-          * Force relative position on wrapper element
+          * Force absolute position on wrapper element
           */
 
           $(this).css({ position : 'absolute' });
@@ -209,11 +197,16 @@
 
     /*
     * Move to a given slide index
-    * index            -> slide index
-    * force_continuity -> force a particular direction
+    * index -> slide index
+    * options = {
+      speed : ...
+      easing : ...
+      direction : ...
+      transition : ...
+    }
     */
 
-    step_to: function (index, direction, transition, speed) {
+    step_to: function (index, user_options) {
 
       return $(this).each(function () {
 
@@ -235,6 +228,35 @@
           data.is_moving = true;
 
           /*
+          * Set default transition_options, and merge with user supplied ones
+          */
+
+          var options = {
+            speed      : data.speed,
+            easing     : data.easing,
+            direction  : null,
+            transition : data.transition
+          };
+
+          if (user_options) {
+            $.extend(options, user_options);
+          }
+
+          /*
+          * Set direction if none was supplied
+          * Usually need when users click pageer anchors
+          */
+
+          if (!options.direction) {
+            if (index > data.index) {
+              options.direction = "advance";
+            }
+            if (index < data.index) {
+              options.direction = "retreat";
+            }
+          }
+
+          /*
           * Update the pager, if it's there
           */
 
@@ -245,16 +267,20 @@
 
           /*
           * Run the BEFORE callback
+          * include both id and idx
+          * id is deprecated
           */
 
           if (typeof data.before === "function") {
 
             var old_slide = {
               id    : data.index,
+              idx   : data.index,
               slide : $(data.slides[data.index])
             },
             new_slide = {
               id    : index,
+              idx   : index,
               slide : $(data.slides[index])
             };
 
@@ -263,28 +289,10 @@
           }
 
           /*
-          * Set direction if none was supplied
-          * Usually need when users click pageer anchors
-          */
-
-          if (typeof direction === "undefined") {
-            if (index > data.index) {
-              direction = "advance";
-            }
-            if (index < data.index) {
-              direction = "retreat";
-            }
-          }
-
-          /*
           * Run the transition (user defined or preassigned)
           */
 
-          if (transition && transitions[transition]) {
-            transitions[transition].call(this, index, direction, speed);
-          } else {
-            data.transition.call(this, index, direction, speed);
-          }
+          transitions[options.transition].call(this, index, options);
 
         }
 
@@ -294,7 +302,7 @@
 
     // -------------------------------
 
-    next: function (direction, transition) {
+    next: function (user_options) {
 
       return $(this).each(function () {
 
@@ -306,9 +314,21 @@
 
         var index = (data.index === data.count - 1) ? 0 : data.index + 1;
 
-        direction = direction || "advance";
+        /*
+        * Set default transition_options, and merge with user supplied ones
+        * Only one here that is required to be passed on to step_to is DIRECTION
+        * step_two will do another merge for the other attributes later on
+        */
 
-        methods.step_to.call(this, index, direction, transition);
+        var options = {
+          direction  : "advance"
+        };
+
+        if (user_options) {
+          $.extend(options, user_options);
+        }
+
+        methods.step_to.call(this, index, options);
 
       });
 
@@ -316,7 +336,7 @@
 
     // -------------------------------
 
-    prev: function (direction, transition) {
+    prev: function (user_options) {
 
       return $(this).each(function () {
 
@@ -328,9 +348,21 @@
 
         var index = (data.index === 0) ? data.count - 1 : data.index - 1;
 
-        direction = direction || "retreat";
+        /*
+        * Set default transition_options, and merge with user supplied ones
+        * Only one here that is required to be passed on to step_to is DIRECTION
+        * step_two will do another merge for the other attributes later on
+        */
 
-        methods.step_to.call(this, index, direction, transition);
+        var options = {
+          direction  : "retreat"
+        };
+
+        if (user_options) {
+          $.extend(options, user_options);
+        }
+
+        methods.step_to.call(this, index, options);
 
       });
 
@@ -445,11 +477,11 @@
 
     /*
     old_slide = {
-      id : #,
+      idx : #,
       slide : $() object
     }
     new_slide = {
-      id : #,
+      idx : #,
       slide : $() object
     }
     */
@@ -462,11 +494,11 @@
 
     /*
     old_slide = {
-      id : #,
+      idx : #,
       slide : $() object
     }
     new_slide = {
-      id : #,
+      idx : #,
       slide : $() object
     }
     */
@@ -481,7 +513,7 @@
 
   var transitions = {
 
-    horizontal: function (index, direction, speed) {
+    horizontal: function (index, options) {
 
       var data = $(this).data('scrollface');
 
@@ -503,7 +535,7 @@
       * Place the next slide either to the right or left of the current slide
       */
 
-      var next_slide_left_pos = (direction === "advance")
+      var next_slide_left_pos = (options.direction === "advance")
         ? curr_slide_left_pos + data.width
         : curr_slide_left_pos - data.width;
 
@@ -517,11 +549,9 @@
       * Calculate the new wrapper position
       */
 
-      var new_container_pos = (direction === "advance")
+      var new_container_pos = (options.direction === "advance")
           ? curr_container_pos - data.width
           : curr_container_pos + data.width;
-
-      var __speed = (typeof speed === "number" && speed >= 0) ? speed : data.speed;
 
       /*
       * Animate the slides wrapper
@@ -529,21 +559,25 @@
 
       $(this).stop().animate({
         left : new_container_pos
-      }, __speed, data.easing, function () {
+      }, options.speed, options.easing, function () {
 
 
         /*
         * Run the BEFORE callback
+        * include both id and idx
+        * id is deprecated
         */
 
         if (typeof data.after === "function") {
 
           var old_slide = {
             id    : data.index,
+            idx   : data.index,
             slide : $(data.slides[data.index])
           },
           new_slide = {
             id    : index,
+            idx   : index,
             slide : $(data.slides[index])
           };
 
@@ -563,7 +597,7 @@
 
     },
 
-    vertical: function (index, direction) {
+    vertical: function (index, options) {
 
       var data = $(this).data('scrollface');
 
@@ -582,10 +616,10 @@
 
       /*
       * Calculate the position for the next slide
-      * Place the next slide either to the right or left of the current slide
+      * Place the next slide either to the top or bottom of the current slide
       */
 
-      var next_slide_top_pos = (direction === "advance")
+      var next_slide_top_pos = (options.direction === "advance")
           ? curr_slide_top_pos + data.height
           : curr_slide_top_pos - data.height;
 
@@ -599,7 +633,7 @@
       * Calculate the new wrapper position
       */
 
-      var new_container_pos = (direction === "advance")
+      var new_container_pos = (options.direction === "advance")
           ? curr_container_pos - data.height
           : curr_container_pos + data.height;
 
@@ -609,20 +643,24 @@
 
       $(this).stop().animate({
         top : new_container_pos
-      }, data.speed, data.easing, function () {
+      }, options.speed, options.easing, function () {
 
         /*
         * Run the BEFORE callback
+        * include both id and idx
+        * id is deprecated
         */
 
         if (typeof data.after === "function") {
 
           var old_slide = {
             id    : data.index,
+            idx   : data.index,
             slide : $(data.slides[data.index])
           },
           new_slide = {
             id    : index,
+            idx   : index,
             slide : $(data.slides[index])
           };
 
@@ -642,7 +680,7 @@
 
     },
 
-    random: function (index, direction) {
+    random: function (index, options) {
 
       var data = $(this).data('scrollface');
 
@@ -658,7 +696,7 @@
 
       var transition = available_transitions[Math.floor(Math.random() * available_transitions.length)];
 
-      transitions[transition].call(this, index, direction);
+      transitions[transition].call(this, index, options);
 
     }
 
