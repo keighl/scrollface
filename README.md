@@ -72,7 +72,7 @@ $('#slideshow').scrollface({
 * pager              - `null`,
 * pager_builder      - `function (pager, index, slide) {}`
 * active_pager_class - `active`,
-* transition         - `horizontal`, `vertical`, `random`
+* transition         - `horizontal`, `vertical`, `fade`, `random`
 * before             - `function (old_slide, new_slide) {}`,
 * after              - `function (old_slide, new_slide) {}`
 
@@ -95,7 +95,7 @@ You may also specify per-transition options for the `step_to`, `next`, and `prev
 $('#slideshow).scrollface('next', {
   speed      : 2000,
   easing     : "easeInCubic",
-  direction  : "retreat,
+  direction  : "retreat",
   transition : "random"
 });
 ```
@@ -154,7 +154,8 @@ You may choose one of three transitions (hopefully this number will grow) as the
 
 * `horizontal` - left to right
 * `vertical` - top to bottom
-* `random` - each transition is randomly assigned to `horizontal` or `vertical`
+* `fade` - fade in the next slide over the current one
+* `random` - each transition is randomly assigned to `horizontal`, `vertical` or `fade`
 
 ## Callbacks
 

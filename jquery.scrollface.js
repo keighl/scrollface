@@ -1,7 +1,7 @@
 /*
  * Scrollface - A basic jQuery slideshow
 
- * Copyright (c) 2011 Kyle Truscott
+ * Copyright (c) 2012 Kyle Truscott
  *
  * http://keighl.github.com/scrollface
  *
@@ -52,6 +52,14 @@
           settings.index     = 0;
           settings.is_moving = false;
           settings.timer     = null;
+
+          /*
+          * Drop the init if there are zero or 1 slides
+          */
+
+          if (settings.slides.length <= 1) {
+            return false;
+          }
 
           /*
           * Force absolute position on wrapper element
@@ -680,6 +688,82 @@
 
     },
 
+    fade: function (index, options) {
+
+      var data = $(this).data('scrollface');
+
+      if (!data) {
+        return false;
+      }
+
+      /*
+      * Current slide
+      * Set the z-index: 0
+      */
+
+      var curr_slide = $(data.slides[data.index])
+        .css({
+          zIndex : 0
+        });
+
+      var curr_slide_top_pos = parseInt($(curr_slide).css('top'), 10) || 0,
+      curr_slide_left_pos    = parseInt($(curr_slide).css('left'), 10) || 0;
+
+      /*
+      * Next slide
+      * Set the z-index: 1
+      */
+
+      var next_slide = $(data.slides[index])
+        .css({
+          left   : curr_slide_left_pos,
+          top    : curr_slide_top_pos,
+          zIndex : 1
+        });
+
+      /*
+      * FadeIn the next slide
+      */
+
+      $(next_slide).fadeTo(data.speed, 1.0, function () {
+
+        $(curr_slide).css({ left : data.width, zIndex : 0 }).hide();
+
+        /*
+        * Run the BEFORE callback
+        * include both id and idx
+        * id is deprecated
+        */
+
+        if (typeof data.after === "function") {
+
+          var old_slide = {
+            id    : data.index,
+            idx   : data.index,
+            slide : $(data.slides[data.index])
+          },
+          new_slide = {
+            id    : index,
+            idx   : index,
+            slide : $(data.slides[index])
+          };
+
+          data.after.call(this, old_slide, new_slide);
+
+        }
+
+        /*
+        * Update the slideshow data, and hide the slide we just removed
+        */
+
+        $(curr_slide).hide();
+        data.index     = index;
+        data.is_moving = false;
+
+      });
+
+    },
+
     random: function (index, options) {
 
       var data = $(this).data('scrollface');
@@ -688,7 +772,7 @@
         return false;
       }
 
-      var available_transitions = ["horizontal", "vertical"];
+      var available_transitions = ["horizontal", "vertical", "fade"];
 
       /*
       * Choose a random transition
