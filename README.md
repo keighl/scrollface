@@ -95,7 +95,7 @@ You may also specify per-transition options for the `step_to`, `next`, and `prev
 $('#slideshow).scrollface('next', {
   speed      : 2000,
   easing     : "easeInCubic",
-  direction  : "retreat,
+  direction  : "retreat",
   transition : "random"
 });
 ```
