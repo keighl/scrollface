@@ -524,10 +524,12 @@ p {
   margin-bottom: 2em;
 }
 
-/* line 82, ../sass/screen.scss */
-a.download,
-a.info {
-  padding: 0.3em 1em;
+/* line 85, ../sass/screen.scss */
+.download a,
+.download a:link,
+.download a:visited {
+  padding: 0.5em 1em;
+  background-color: #ee5f5b;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -o-border-radius: 4px;
@@ -542,36 +544,26 @@ a.info {
   background-image: linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
   color: #fff;
   border: 1px solid #c43c35;
-  font-size: 0.8em;
+  font-size: 1em;
 }
-/* line 90, ../sass/screen.scss */
-a.download:active,
-a.info:active {
+/* line 94, ../sass/screen.scss */
+.download a:active,
+.download a:link:active,
+.download a:visited:active {
   -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-/* line 96, ../sass/screen.scss */
-a.download:hover,
-a.info:hover {
+/* line 100, ../sass/screen.scss */
+.download a:hover,
+.download a:link:hover,
+.download a:visited:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
   opacity: 0.9;
+  text-decoration: none;
 }
 
-/* line 103, ../sass/screen.scss */
-a.info {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f7f7f7), color-stop(100%, #eaeaea));
-  background-image: -webkit-linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
-  background-image: -moz-linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
-  background-image: -o-linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
-  background-image: -ms-linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
-  background-image: linear-gradient(top, #f7f7f7 0%, #eaeaea 100%);
-  border: 1px solid #fff;
-  color: #232323;
-  text-shadow: none;
-}
-
-/* line 111, ../sass/screen.scss */
+/* line 109, ../sass/screen.scss */
 .demo_wrapper {
   margin-bottom: 40px;
   padding: 30px 0px;
@@ -580,12 +572,12 @@ a.info {
   border-bottom: 1px #666 solid;
 }
 
-/* line 119, ../sass/screen.scss */
+/* line 117, ../sass/screen.scss */
 .demo {
   position: relative;
 }
 
-/* line 123, ../sass/screen.scss */
+/* line 121, ../sass/screen.scss */
 #slideshow_mask {
   position: relative;
   overflow: hidden;
@@ -594,7 +586,7 @@ a.info {
   height: 320px;
 }
 
-/* line 131, ../sass/screen.scss */
+/* line 129, ../sass/screen.scss */
 #slideshow {
   position: absolute;
   left: 0px;
@@ -603,14 +595,14 @@ a.info {
   height: 320px;
 }
 
-/* line 139, ../sass/screen.scss */
+/* line 137, ../sass/screen.scss */
 #slideshow .slide {
   position: absolute;
   width: 640px;
   height: 320px;
 }
 
-/* line 146, ../sass/screen.scss */
+/* line 144, ../sass/screen.scss */
 a#prev,
 a#next {
   width: 40px;
@@ -630,19 +622,19 @@ a#next {
   -o-user-select: none;
   user-select: none;
 }
-/* line 166, ../sass/screen.scss */
+/* line 164, ../sass/screen.scss */
 a#prev:hover,
 a#next:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
   opacity: 0.9;
 }
-/* line 170, ../sass/screen.scss */
+/* line 168, ../sass/screen.scss */
 a#prev:active,
 a#next:active {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
   opacity: 0.6;
 }
-/* line 174, ../sass/screen.scss */
+/* line 172, ../sass/screen.scss */
 a#prev.inactive,
 a#next.inactive {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=10);
@@ -650,23 +642,23 @@ a#next.inactive {
   cursor: arrow;
 }
 
-/* line 181, ../sass/screen.scss */
+/* line 179, ../sass/screen.scss */
 a#next {
   right: -30px;
 }
 
-/* line 186, ../sass/screen.scss */
+/* line 184, ../sass/screen.scss */
 a#prev {
   left: -30px;
 }
 
-/* line 192, ../sass/screen.scss */
+/* line 190, ../sass/screen.scss */
 #pager {
   margin: 0 auto;
   text-align: center;
   padding-top: 20px;
 }
-/* line 197, ../sass/screen.scss */
+/* line 195, ../sass/screen.scss */
 #pager a {
   display: -moz-inline-box;
   -moz-box-orient: vertical;
@@ -703,22 +695,22 @@ a#prev {
 #pager a {
   *display: inline;
 }
-/* line 209, ../sass/screen.scss */
+/* line 207, ../sass/screen.scss */
 #pager a:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   opacity: 0.8;
 }
-/* line 213, ../sass/screen.scss */
+/* line 211, ../sass/screen.scss */
 #pager a:active {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
   opacity: 0.5;
 }
-/* line 217, ../sass/screen.scss */
+/* line 215, ../sass/screen.scss */
 #pager a.active {
   background-color: #c43c35;
 }
 
-/* line 225, ../sass/screen.scss */
+/* line 223, ../sass/screen.scss */
 pre.prettyprint {
   clear: both;
   margin-left: 2.041%;
@@ -734,7 +726,7 @@ pre.prettyprint {
   border: 1px #666 solid;
   margin-left: 0px;
 }
-/* line 233, ../sass/screen.scss */
+/* line 231, ../sass/screen.scss */
 pre.prettyprint:last-child {
   margin-bottom: 40px;
 }
