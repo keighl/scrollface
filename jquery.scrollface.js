@@ -336,6 +336,7 @@
           $.extend(options, user_options);
         }
 
+        methods.interrupt.call(this);
         methods.step_to.call(this, index, options);
 
       });
@@ -370,6 +371,7 @@
           $.extend(options, user_options);
         }
 
+        methods.interrupt.call(this);
         methods.step_to.call(this, index, options);
 
       });
